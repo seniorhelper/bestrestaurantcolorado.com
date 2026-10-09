@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://bestrestaurantcolorado.com/sitemap.xml

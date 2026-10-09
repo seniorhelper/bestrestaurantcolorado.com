@@ -793,7 +793,7 @@ footer li{margin-bottom:9px;line-height:1.4}
       </div>
       <div>
         <div class="form-wrap">
-          <form id="adform" method="POST" data-fs="info@eyetoad.com" novalidate>
+          <form id="adform" method="POST" data-a="aW5mbw==" data-b="ZXlldG9hZC5jb20=" novalidate>
             <div class="f2">
               <div class="field">
                 <label for="f-name">Your name</label>
@@ -838,12 +838,11 @@ footer li{margin-bottom:9px;line-height:1.4}
             </div>
             <input type="text" name="_honey" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
             <input type="hidden" name="_captcha" value="false">
-            <input type="hidden" name="_subject" value="bestrestaurantcolorado.com - advertising or featured listing enquiry">
-            <input type="hidden" name="_next" value="https://bestrestaurantcolorado.com/?sent=1">
+            <input type="hidden" name="_subject" value="New lead — bestrestaurantcolorado.com">
             <input type="hidden" name="_template" value="table">
             <button class="btn" type="submit" id="fbtn" style="width:100%;padding:15px">Send enquiry</button>
             <p id="fstatus" role="status"></p>
-            <p class="formnote">Goes to info@eyetoad.com. We answer enquiries ourselves, usually within a business day. No list, no newsletter, no resale of your details.</p>
+            <p class="formnote">Goes straight to our inbox. We answer enquiries ourselves, usually within a business day. No list, no newsletter, no resale of your details.</p>
           </form>
           <iframe name="fsink" id="fsink" style="display:none" title="form sink" aria-hidden="true"></iframe>
         </div>
@@ -861,6 +860,7 @@ footer li{margin-bottom:9px;line-height:1.4}
           <li><a href="/colorado-mountain-town-restaurants/">Mountain town restaurants</a></li>
           <li><a href="/michelin-star-restaurants-colorado/">MICHELIN stars in Colorado</a></li>
           <li><a href="/best-restaurants-front-range/">Front Range beyond Denver</a></li>
+          <li><a href="/james-beard-awards-colorado/">James Beard Awards explained</a></li>
           <li><a href="#advertise">Advertising &amp; featured listings</a></li>
         </ul>
       </div>
@@ -898,7 +898,7 @@ footer li{margin-bottom:9px;line-height:1.4}
           <li><a href="https://eyetoad.com/">Eye To Ad Media</a></li>
           <li>1001 Bannock St #660<br>Denver, CO 80204</li>
           <li><a href="tel:+18004818638">1-800-481-8638</a></li>
-          <li><a href="mailto:info@eyetoad.com">info@eyetoad.com</a></li>
+          <li><a class="eml" href="#advertise" data-a="aW5mbw==" data-b="ZXlldG9hZC5jb20=">Email us</a></li>
         </ul>
       </div>
     </div>
@@ -909,7 +909,7 @@ footer li{margin-bottom:9px;line-height:1.4}
   </div>
 </footer>
 <div class="sr-only"><h2>Fact sheet</h2><ul>
-<li>Publisher: Eye To Ad Media, 1001 Bannock St #660, Denver CO 80204, 1-800-481-8638, info@eyetoad.com.</li>
+<li>Publisher: Eye To Ad Media, 1001 Bannock St #660, Denver CO 80204, 1-800-481-8638.</li>
 <li>Page scope: Colorado mountain town restaurants in the High Rockies and San Juans regions.</li>
 <li>11 award-holding restaurants across the mountain towns.</li>
 <li>Bosq in Aspen is the only MICHELIN-starred restaurant in a Colorado mountain town.</li>
@@ -1031,60 +1031,52 @@ document.querySelectorAll('#plot .pin').forEach(function(p){
   p.addEventListener('mouseleave',function(){ rows.forEach(function(r){ r.classList.remove('hl'); }); });
 });
 
+</script>
+<script>
+/* Lead form: FormSubmit AJAX, address assembled at runtime */
 (function(){
-  var form=document.getElementById('adform');
+  document.querySelectorAll('a.eml[data-a]').forEach(function(a){
+    var e = atob(a.getAttribute('data-a')) + String.fromCharCode(64) + atob(a.getAttribute('data-b'));
+    a.href = 'mailto:' + e; a.textContent = e;
+  });
+  var form = document.getElementById('adform');
   if(!form) return;
-  var btn=document.getElementById('fbtn');
-  var status=document.getElementById('fstatus');
-  var loaded=Date.now();
-  var lastSend=0;
-  var SPAM=/\b(seo services|guest post|backlink|crypto|casino|loan offer|viagra|escort|bitcoin investment)\b/i;
-
-  function buildAction(f){ return 'https://formsubmit.co/'+f.dataset.fs; }
-  function say(cls,msg){ status.className=cls; status.textContent=msg; }
-
-  form.addEventListener('submit',function(e){
+  var loadedAt = Date.now();
+  var btn = form.querySelector('[type="submit"]');
+  var label = btn ? btn.textContent : '';
+  function show(ok, text){
+    var m = document.getElementById('fstatus'); if(!m) return;
+    m.className = ok ? 'ok' : 'bad'; m.textContent = text;
+  }
+  function addr(){ return atob(form.getAttribute('data-a')) + String.fromCharCode(64) + atob(form.getAttribute('data-b')); }
+  form.addEventListener('submit', function(e){
     e.preventDefault();
-    if(form.querySelector('[name="_honey"]').value!==''){ return; }
-    if(Date.now()-loaded < 4000){ say('warn','Give the page a moment to finish loading, then send.'); return; }
-    if(Date.now()-lastSend < 60000){ say('warn','That was just sent. Wait a minute before sending again.'); return; }
-
-    var name=form.name.value.trim();
-    var email=form.email.value.trim();
-    var phone=form.phone.value.trim();
-    var msg=form.message.value.trim();
-
-    if(name.length<2||!/^[\p{L}\s.'\-]{2,60}$/u.test(name)){ say('warn','Enter your name as you would write it.'); return; }
-    if(!/^[^@\s]+@[^@\s.]+\.[^@\s]{2,}$/.test(email)){ say('warn','That email address does not look complete.'); return; }
-    if(phone.replace(/\D/g,'').length<10){ say('warn','A phone number with at least 10 digits, please.'); return; }
-    if(SPAM.test(msg)||SPAM.test(name)){ say('bad','This message was blocked by the spam filter.'); return; }
-
-    btn.disabled=true; btn.textContent='Sending...';
-    lastSend=Date.now();
-
-    fetch('https://formsubmit.co/ajax/'+form.dataset.fs,{
-      method:'POST', headers:{'Accept':'application/json'}, body:new FormData(form)
-    }).then(function(r){
-      if(!r.ok) throw new Error('bad status');
-      return r.json();
-    }).then(function(){
-      say('ok','Sent and confirmed. We will reply to '+email+', usually within a business day.');
-      btn.textContent='Sent'; form.reset();
-    }).catch(function(){
-      try{
-        var f2=document.createElement('form');
-        f2.method='POST'; f2.action=buildAction(form); f2.target='fsink'; f2.style.display='none';
-        new FormData(form).forEach(function(v,k){
-          var i=document.createElement('input'); i.type='hidden'; i.name=k; i.value=v; f2.appendChild(i);
-        });
-        document.body.appendChild(f2); f2.submit();
-        say('warn','Sent, but we could not confirm delivery. If you do not hear back within a day, call 1-800-481-8638.');
-        btn.textContent='Sent';
-      }catch(err){
-        say('bad','That did not send. Email info@eyetoad.com or call 1-800-481-8638.');
-        btn.disabled=false; btn.textContent='Send enquiry';
+    var hp = form.querySelectorAll('input[name="_honey"]');
+    for(var i = 0; i < hp.length; i++){ if(hp[i].value.trim() !== '') return; }
+    if(Date.now() - loadedAt < 3500){ show(false, 'Give the form a moment, then send again.'); return; }
+    var req = form.querySelectorAll('[required]');
+    for(var j = 0; j < req.length; j++){
+      var el = req[j], v = (el.value || '').trim();
+      if(!v || (el.type === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v))){
+        show(false, 'Please fill in every required field.'); el.focus(); return;
       }
-    });
+    }
+    var ph = form.querySelector('[name="phone"]');
+    if(ph && ph.value.replace(/\D/g, '').length < 10){ show(false, 'A phone number with at least 10 digits, please.'); ph.focus(); return; }
+    var SPAM = /\b(seo services|guest post|backlink|crypto|casino|loan offer|viagra|escort|bitcoin investment)\b/i;
+    var mm = form.querySelector('[name="message"]');
+    if(mm && SPAM.test(mm.value)){ show(false, 'This message was blocked by the spam filter.'); return; }
+    if(btn){ btn.disabled = true; btn.textContent = 'Sending\u2026'; }
+    var data = new FormData(form);
+    fetch('https://formsubmit.co/ajax/' + addr(), {method:'POST', headers:{Accept:'application/json'}, body:data})
+      .then(function(r){ if(!r.ok) throw 0; return r.json(); })
+      .then(function(j){
+        if(j && (j.success === false || j.success === 'false')) throw 0;
+        show(true, "Sent. We'll get back to you shortly.");
+        form.reset();
+      })
+      .catch(function(){ show(false, 'That did not go through. Please call 1-800-481-8638.'); })
+      .then(function(){ if(btn){ btn.disabled = false; btn.textContent = label; } });
   });
 })();
 </script>

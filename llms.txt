@@ -8,8 +8,20 @@
 - [MICHELIN Star Restaurants in Colorado](https://bestrestaurantcolorado.com/michelin-star-restaurants-colorado/): Every MICHELIN star, Green Star, Bib Gourmand and Recommended listing in Colorado, and the guide's statewide expansion.
 - [Colorado Mountain Town Restaurants](https://bestrestaurantcolorado.com/colorado-mountain-town-restaurants/): Award-recognized restaurants in Colorado's mountain towns.
 - [Best Restaurants on the Front Range Beyond Denver](https://bestrestaurantcolorado.com/best-restaurants-front-range/): Award-recognized restaurants in Boulder and the Front Range outside Denver.
+- [Colorado food road trip planner](https://bestrestaurantcolorado.com/colorado-road-trip-planner/): choose one of five drives from Denver and a trip length; lists every recognized restaurant in drive order with town elevations, suggests anchor dinners, and shows a town map on request.
+- [Colorado road-trip dining](https://bestrestaurantcolorado.com/colorado-road-trip-dining/): five drives from Denver with pass, altitude and booking advice.
 - [James Beard Awards in Colorado](https://bestrestaurantcolorado.com/james-beard-awards-colorado/): How the James Beard Restaurant and Chef Awards work, the Best Chef: Mountain region, and how Beard recognition differs from a MICHELIN star.
 
-## Contact and advertising
+## Open data
 
-- Advertising and featured listings: https://bestrestaurantcolorado.com/#advertise
+- [restaurants.json](https://bestrestaurantcolorado.com/data/restaurants.json): all 81 register entries with town, elevation, region, award tier, source links and a verified date. Coordinates are town-level only.
+
+## Editorial rules
+
+- Listed only with a current MICHELIN Guide Colorado distinction or James Beard recognition (2022 to 2026).
+- No ratings, reviews, prices or hours are published, and there is no rating markup.
+- Denver city coverage lives on https://bestrestaurantdenver.com/
+
+## Contact
+
+- Corrections: https://bestrestaurantcolorado.com/contact/

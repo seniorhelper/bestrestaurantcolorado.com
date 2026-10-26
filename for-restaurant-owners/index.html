@@ -259,7 +259,7 @@
     </div>
   </div>
 </footer>
-<script>
+<script>try{
 (function(){
 function measureHeader(){var h=document.getElementById('hdr');if(h){document.documentElement.style.setProperty('--hdr',h.getBoundingClientRect().height+'px');}}
 window.addEventListener('load',measureHeader);window.addEventListener('resize',measureHeader);measureHeader();
@@ -270,6 +270,7 @@ mobnav.addEventListener('click',function(e){if(e.target.tagName==='A'){mobnav.cl
 document.addEventListener('keydown',function(e){if(e.key==='Escape'&&mobnav.classList.contains('open')){mobnav.classList.remove('open');burger.setAttribute('aria-expanded','false');document.body.style.overflow='';burger.focus();}});
 }
 })();
-</script>
+
+}catch(e){}</script>
 </body>
 </html>
